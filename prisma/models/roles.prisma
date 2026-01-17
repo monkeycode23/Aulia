@@ -1,0 +1,28 @@
+enum ERole {
+  USER
+  MOD
+  ADMIN
+  DIRECTIVE_ADMIN
+  PARENT
+}
+
+enum EPermission {
+  USER_CREATE
+  USER_EDIT
+  USER_GET
+  USER_DELETE
+}
+
+model Permission {
+  id    Int        @id @default(autoincrement())
+  name  EPermission @unique
+
+  roles Role[]     @relation("RolePermissions")
+}
+
+model Role {
+  id          Int         @id @default(autoincrement())
+  name        ERole       @unique
+  permissions Permission[] @relation("RolePermissions")
+}
+

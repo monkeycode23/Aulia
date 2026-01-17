@@ -1,0 +1,14 @@
+npx prisma-merge-schema --datasource ./prisma/src/**/*  --outputFile output.schema
+
+
+npx prisma generate
+
+npx prisma migrate resolve --applied 0_init
+
+
+
+npx prisma migrate dev --name your_migration_name
+
+
+npx prisma db pull
+

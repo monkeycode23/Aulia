@@ -6,13 +6,14 @@
     "dev": "nodemon --watch src --exec ts-node src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Proyecto fullstack con **Node.js (Clean Architecture)** + **React** + **PostgreSQL + MongoDB** + **JWT + Emails + WebSockets + GraphQL**.",
   "dependencies": {
     "@apollo/server": "^5.2.0",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "^7.2.0",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.8.0",
     "compression": "^1.8.1",
@@ -34,6 +35,7 @@
     "nodemailer": "^7.0.11",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
+    "pg": "^8.17.1",
     "react-hook-form": "^7.68.0",
     "socket.io": "^4.8.1",
     "sonner": "^2.0.7"
@@ -46,10 +48,13 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
     "@types/multer": "^2.0.0",
-    "@types/node": "^24.10.1",
+    "@types/node": "^24.10.9",
     "@types/nodemailer": "^7.0.4",
+    "@types/pg": "^8.16.0",
     "i": "^0.3.7",
     "nodemon": "^3.1.11",
+    "prisma": "^7.2.0",
+    "prisma-merge-schema": "^1.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
