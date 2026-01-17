@@ -35,7 +35,7 @@ root/
     │   ├── context/                # Contextos (Auth, UI, etc.)
     │   └── routes/                 # Rutas
     └── package.json
-
+```
 
 ##  Comandos
 
@@ -44,13 +44,14 @@ root/
 npm install
 npm run dev
 
+```bash
 cd backend
 npm install
 npm run dev
  
 
- cd frontend
+```bash 
+cd frontend
 npm install
 npm run dev
 
-```
