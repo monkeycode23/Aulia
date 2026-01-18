@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 export class JwtService {
   private secret = process.env.JWT_SECRET || "secret";
 
-  generate(userId: string) {
+  generate(userId: number) {
     return jwt.sign({ userId }, this.secret, { expiresIn: "15m" });
   }
 

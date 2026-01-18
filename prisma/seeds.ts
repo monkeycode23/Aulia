@@ -13,6 +13,7 @@ async function main() {
        { name: "SECRETARY" },
        { name: "CONSUL" },
        { name: "DIRECTIVE_ADMIN" },
+       { name: "SCHOOL_ADMIN" },
        { name: "PARENT" },
     ],
     skipDuplicates: true,

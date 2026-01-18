@@ -1,0 +1,13 @@
+
+model Group {
+  id         Int      @id @default(autoincrement())
+  name       String   // nombre del grupo, ej: "3A", "Primero B"
+  gradeLevel String   // nivel o grado académico, ej: "Primaria 3", "Secundaria 1"
+  status     String   @default("ACTIVE") // ACTIVE, INACTIVE, CLOSED
+
+     subjects Subject[] @relation("SubjectGroups") // opuesto de Subject.groups
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+

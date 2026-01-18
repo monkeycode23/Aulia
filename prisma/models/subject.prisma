@@ -1,0 +1,15 @@
+model Subject {
+  id         Int      @id @default(autoincrement())
+  name       String   // nombre de la materia, ej: "Matemáticas"
+  code       String?  @unique // código de materia opcional, ej: "MAT101"
+  description String? // descripción opcional
+  status     String   @default("ACTIVE") // ACTIVE, INACTIVE, ARCHIVED
+
+  
+  teachers  Teacher[]  @relation("TeacherSubject")
+  groups     Group[]  @relation("GroupSubjects")   // grupos donde se imparte
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+

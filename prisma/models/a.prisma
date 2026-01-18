@@ -1,30 +1,75 @@
-model Subject {
-  id         Int      @id @default(autoincrement())
-  name       String   // nombre de la materia, ej: "Matemáticas"
-  code       String?  @unique // código de materia opcional, ej: "MAT101"
-  description String? // descripción opcional
-  status     String   @default("ACTIVE") // ACTIVE, INACTIVE, ARCHIVED
 
+model School {
+  id              Int       @id @default(autoincrement())
+  name            String
+  code            String?   @unique // Código único de la escuela
+  type            SchoolType
+  establishedAt   DateTime?  // Fecha de fundación
+  email           String?    @unique
+  phone           String?
+  address         String?
+  city            String?
+  state           String?
+  country         String?
+  postalCode      String?
+  website         String?
+  logoUrl         String?
   
-  teachers  Teacher[]  @relation("TeacherSubject")
-  groups     Group[]  @relation("GroupSubjects")   // grupos donde se imparte
-  
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  teachers        Teacher[]   @relation("TeachersOfSchool")
+  students        Student[]
+  groups         Group[]
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 }
 
+model Student {
+  id       Int    @id @default(autoincrement())
+  personId Int    @unique
+  person   Person @relation(fields: [personId], references: [id])
+
+  enrollmentNumber String    @unique 
+  gradeLevel       String? 
+  section          String? 
+  status           String    @default("ACTIVE") 
+  enrollmentDate   DateTime  @default(now())
+  graduationDate   DateTime?
+
+  school      School?  @relation(fields: [schoolId], references: [id])
+  schoolId    Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+enum ERole {
+  USER
+  SYS_MOD
+  SYS_ADMIN
+  PRINCIPAL
+  DIRECTIVE_ADMIN
+  SECRETARY
+  SCHOOL_ADMIN
+  CONSUL
+  PARENT
+}
 
 model Group {
   id         Int      @id @default(autoincrement())
   name       String   // nombre del grupo, ej: "3A", "Primero B"
   gradeLevel String   // nivel o grado académico, ej: "Primaria 3", "Secundaria 1"
   status     String   @default("ACTIVE") // ACTIVE, INACTIVE, CLOSED
+  subjects Subject[] @relation("SubjectGroups") // opuesto de Subject.groups
 
-     subjects Subject[] @relation("SubjectGroups") // opuesto de Subject.groups
-
+school      School?  @relation(fields: [schoolId], references: [id])
+  schoolId    Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+
 
 model Teacher {
   id         Int      @id @default(autoincrement())
@@ -37,7 +82,9 @@ model Teacher {
   hireDate        DateTime @default(now())
   terminationDate DateTime?
 
-  // Relaciones
+ school      School?  @relation("TeachersOfSchool", fields: [schoolId], references: [id])
+  schoolId    Int?
+  
   user          User?      // cuenta en el sistema si aplica
   subjects      Subject[]  @relation("TeacherSubject") // asignaturas que enseña
   

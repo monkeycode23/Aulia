@@ -41,7 +41,6 @@ model UserSubscription {
 
   isAutoRenew Boolean   @default(false)
   renewedAt   DateTime?
-
   
   maxDevices Int       @default(1)
   lastUsedAt DateTime?

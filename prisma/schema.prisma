@@ -37,9 +37,65 @@ model Person {
   updatedAt      DateTime @updatedAt
 
   // Relaciones con entidades específicas
-  user User?
 
+  user    User?
   student Student?
+  teacher Teacher?
+}
+
+model User {
+  id              Int       @id @default(autoincrement())
+  email           String    @unique
+  username        String?
+  passwordHash    String
+  avatar          String    @default("https://api.dicebear.com/7.x/initials/svg?seed=Juan%20Perez")
+  verifiedEmail   Boolean   @default(false)
+  emailVerifiedAt DateTime?
+  isActive        Boolean   @default(true)
+  failedLogins    Int       @default(0)
+  lockedUntil     DateTime?
+  lastLoginAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+
+  roles Role[] @relation("UserRoles")
+
+  school            School?            @relation("SchoolAdmin")
+  tokens            Token[]            @relation("UserToken")
+  userSubscriptions UserSubscription[]
+
+  personId Int       @unique
+  person   Person    @relation(fields: [personId], references: [id])
+  teachers Teacher[]
+}
+
+model School {
+  id            Int       @id @default(autoincrement())
+  name          String
+  code          String?   @unique // Código único de la escuela
+  type          String
+  establishedAt DateTime? // Fecha de fundación
+  email         String?   @unique
+  phone         String?
+  address       String?
+  city          String?
+  state         String?
+  country       String?
+  postalCode    String?
+  website       String?
+  logoUrl       String?
+
+  teachers Teacher[] @relation("TeachersOfSchool")
+  students Student[]
+  groups   Group[]
+
+  subjects    Subject[] // Una escuela tiene muchas materias
+  principal   User?     @relation("SchoolAdmin", fields: [principalId], references: [id])
+  principalId Int?      @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Student {
@@ -47,23 +103,82 @@ model Student {
   personId Int    @unique
   person   Person @relation(fields: [personId], references: [id])
 
-  enrollmentNumber String    @unique // número de matrícula del alumno
-  gradeLevel       String? // nivel o grado escolar
-  section          String? // sección o grupo
-  status           String    @default("ACTIVE") // ACTIVE, INACTIVE, SUSPENDED, etc.
+  enrollmentNumber String    @unique
+  gradeLevel       String?
+  section          String?
+  status           String    @default("ACTIVE")
   enrollmentDate   DateTime  @default(now())
   graduationDate   DateTime?
+
+  school   School? @relation(fields: [schoolId], references: [id])
+  schoolId Int?
+
+  group   Group? @relation(fields: [groupId], references: [id])
+  groupId Int?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-enum ERole {
-  USER
-  MOD
-  ADMIN
-  DIRECTIVE_ADMIN
-  PARENT
+model Teacher {
+  id       Int    @id @default(autoincrement())
+  personId Int    @unique
+  person   Person @relation(fields: [personId], references: [id])
+
+  employeeNumber  String    @unique // número de empleado o ID interno del docente
+  specialization  String? // materia o área de especialidad
+  status          String    @default("ACTIVE") // ACTIVE, INACTIVE, SUSPENDED, RETIRED
+  hireDate        DateTime  @default(now())
+  terminationDate DateTime?
+
+  school   School? @relation("TeachersOfSchool", fields: [schoolId], references: [id])
+  schoolId Int?
+
+  user User? @relation(fields: [userId], references: [id]) // cuenta en el sistema si aplica
+
+  group   Group? @relation(fields: [groupId], references: [id])
+  groupId Int?
+
+  subjects Subject[] @relation("TeacherSubject") // Muchos a muchos con Subject
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int?
+}
+
+model Subject {
+  id          Int     @id @default(autoincrement())
+  name        String // nombre de la materia, ej: "Matemáticas"
+  code        String? @unique // código de materia opcional, ej: "MAT101"
+  description String? // descripción opcional
+  status      String  @default("ACTIVE") // ACTIVE, INACTIVE, ARCHIVED
+
+  school   School? @relation(fields: [schoolId], references: [id])
+  schoolId Int?
+
+  teachers Teacher[] @relation("TeacherSubject")
+  groups   Group[]   @relation("GroupSubjects") // grupos donde se imparte
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Group {
+  id         Int    @id @default(autoincrement())
+  name       String // nombre del grupo, ej: "3A", "Primero B"
+  gradeLevel String // nivel o grado académico, ej: "Primaria 3", "Secundaria 1"
+  status     String @default("ACTIVE") // ACTIVE, INACTIVE, CLOSED
+
+  teachers Teacher[]
+  students Student[]
+
+  subjects Subject[] @relation("GroupSubjects") // Muchos a muchos con Subject
+
+  school   School? @relation(fields: [schoolId], references: [id])
+  schoolId Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Permission {
@@ -75,37 +190,9 @@ model Permission {
 
 model Role {
   id          Int          @id @default(autoincrement())
-  name        ERole        @unique
+  name        String       @unique
   permissions Permission[] @relation("RolePermissions")
-
-  users User[] @relation("UserRoles")
-}
-
-model User {
-  id           Int     @id @default(autoincrement())
-  email        String  @unique
-  username     String?
-  passwordHash String
-
-  avatar               String    @default("https://api.dicebear.com/7.x/initials/svg?seed=Juan%20Perez")
-  verifiedEmail        Boolean   @default(false)
-  emailVerifiedAt      DateTime?
-  isActive             Boolean   @default(true)
-  failedLogins         Int       @default(0)
-  lockedUntil          DateTime?
-  passwordResetToken   String?
-  passwordResetExpires DateTime?
-  lastLoginAt          DateTime?
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
-  deletedAt            DateTime?
-
-  roles Role[] @relation("UserRoles")
-
-  userSubscriptions UserSubscription[]
-
-  personId Int    @unique
-  person   Person @relation(fields: [personId], references: [id])
+  users       User[]       @relation("UserRoles")
 }
 
 model LicenceKey {
@@ -122,6 +209,22 @@ enum PlanTerms {
   YEARLY
 }
 
+//////tokens
+
+model Token {
+  id    Int    @id @default(autoincrement())
+  token String
+  type  String
+
+  users     User[]   @relation("UserToken")
+  expiresAt DateTime
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+/////////subscripciones
 model Plan {
   id            Int                @id @default(autoincrement())
   name          String

@@ -1,0 +1,20 @@
+model Teacher {
+  id         Int      @id @default(autoincrement())
+  personId   Int      @unique
+  person     Person   @relation(fields: [personId], references: [id])
+
+  employeeNumber String   @unique // número de empleado o ID interno del docente
+  specialization  String?  // materia o área de especialidad
+  status          String   @default("ACTIVE") // ACTIVE, INACTIVE, SUSPENDED, RETIRED
+  hireDate        DateTime @default(now())
+  terminationDate DateTime?
+
+  
+  user          User?      // cuenta en el sistema si aplica
+  subjects      Subject[]  @relation("TeacherSubject") // asignaturas que enseña
+  
+  groups        Group[]    @relation("TeacherGroups")   // grupos o clases asignadas
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

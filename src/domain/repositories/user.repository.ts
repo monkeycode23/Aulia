@@ -1,6 +1,6 @@
 import { User } from "../entities/user.entity";
 
-export interface AuthRepository {
+export interface UserRepository {
   findByEmail(email: string): Promise<User | null>;
-  findToken(userId:number):Promise<any | null>
+  
 }
