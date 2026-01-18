@@ -22,4 +22,22 @@ export class AuthController {
       res.status(401).json({ message: err.message });
     }
   }
+
+
+   async register(req: Request, res: Response) {
+    try {
+      const { email, password } = req.body;
+
+      const useCase = new LoginLocalUseCase(
+        new AuthRepositoryPg(),
+        new LocalAuthService(),
+        new JwtService()
+      );
+
+      const result = await useCase.execute(email, password);
+      res.json(result);
+    } catch (err: any) {
+      res.status(401).json({ message: err.message });
+    }
+  }
 }
