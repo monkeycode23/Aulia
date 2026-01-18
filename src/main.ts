@@ -24,17 +24,17 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(staticPath))
+app.use(express.static(staticPath));
   
 
 
-/* app.use("/api", apiRouter);
 
- */
+//routes
+import router from "./infrastructure/http/routes/index";
+app.use("/api", router);
 
-  // Configurar Express para servir los archivos estáticos
 
-
+//graphql
 /* import { setupGraphQL } from "./graphql/graphql";
 setupGraphQL(app);
  */

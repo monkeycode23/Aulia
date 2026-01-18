@@ -46,7 +46,7 @@ model Person {
 model User {
   id              Int       @id @default(autoincrement())
   email           String    @unique
-  username        String?
+  username        String?   @unique
   passwordHash    String
   avatar          String    @default("https://api.dicebear.com/7.x/initials/svg?seed=Juan%20Perez")
   verifiedEmail   Boolean   @default(false)
@@ -62,7 +62,7 @@ model User {
   roles Role[] @relation("UserRoles")
 
   school            School?            @relation("SchoolAdmin")
-  tokens            Token[]            @relation("UserToken")
+   tokens    Token[] @relation("UserTokens") // Usuario puede tener muchos tokens
   userSubscriptions UserSubscription[]
 
   personId Int       @unique
@@ -215,8 +215,9 @@ model Token {
   id    Int    @id @default(autoincrement())
   token String
   type  String
-
-  users     User[]   @relation("UserToken")
+    
+    userId Int
+  user     User   @relation("UserTokens",fields: [userId], references: [id])
   expiresAt DateTime
 
   createdAt DateTime  @default(now())

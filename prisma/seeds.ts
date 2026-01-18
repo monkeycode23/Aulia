@@ -10,6 +10,7 @@ async function main() {
       { name: "USER" },
       { name: "ADMIN" },
       { name: "MOD" },
+      { name: "PRINCIPAL" },
        { name: "SECRETARY" },
        { name: "CONSUL" },
        { name: "DIRECTIVE_ADMIN" },
@@ -75,3 +76,6 @@ async function main() {
 main()
   .catch((e) => console.error(e))
   .finally(async () => await prisma.$disconnect()); 
+
+
+  
