@@ -1,0 +1,48 @@
+model Subject {
+  id         Int      @id @default(autoincrement())
+  name       String   // nombre de la materia, ej: "Matemáticas"
+  code       String?  @unique // código de materia opcional, ej: "MAT101"
+  description String? // descripción opcional
+  status     String   @default("ACTIVE") // ACTIVE, INACTIVE, ARCHIVED
+
+  
+  teachers  Teacher[]  @relation("TeacherSubject")
+  groups     Group[]  @relation("GroupSubjects")   // grupos donde se imparte
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+
+model Group {
+  id         Int      @id @default(autoincrement())
+  name       String   // nombre del grupo, ej: "3A", "Primero B"
+  gradeLevel String   // nivel o grado académico, ej: "Primaria 3", "Secundaria 1"
+  status     String   @default("ACTIVE") // ACTIVE, INACTIVE, CLOSED
+
+     subjects Subject[] @relation("SubjectGroups") // opuesto de Subject.groups
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Teacher {
+  id         Int      @id @default(autoincrement())
+  personId   Int      @unique
+  person     Person   @relation(fields: [personId], references: [id])
+
+  employeeNumber String   @unique // número de empleado o ID interno del docente
+  specialization  String?  // materia o área de especialidad
+  status          String   @default("ACTIVE") // ACTIVE, INACTIVE, SUSPENDED, RETIRED
+  hireDate        DateTime @default(now())
+  terminationDate DateTime?
+
+  // Relaciones
+  user          User?      // cuenta en el sistema si aplica
+  subjects      Subject[]  @relation("TeacherSubject") // asignaturas que enseña
+  
+  groups        Group[]    @relation("TeacherGroups")   // grupos o clases asignadas
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
