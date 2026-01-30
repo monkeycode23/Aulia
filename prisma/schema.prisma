@@ -173,7 +173,7 @@ model AcademicPeriod {
 
   name String @unique
 
-  status String @default("ACTIVE")
+  active Boolean @default(true)
 
   startDate DateTime
   endDate   DateTime

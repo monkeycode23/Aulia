@@ -1,6 +1,6 @@
 import { Group } from "../entities/group.entity";
 
-interface GroupRepository {
+export interface GroupRepository {
     create(group: Group): Promise<Group>;
     findAll(): Promise<Group[]>;
     findById(id: string): Promise<Group | null>;
