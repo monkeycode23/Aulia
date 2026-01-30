@@ -28,7 +28,7 @@ type TeacherCreateData = {
 export class TeacherRepositoryPg implements TeacherRepository {
 
   // Buscar por ID
-  async findById(id: number): Promise<Teacher | null> {
+  async findById(id: string): Promise<Teacher | null> {
     const res = await prisma.teacher.findUnique({
       where: { id },
       include: {
@@ -71,20 +71,7 @@ export class TeacherRepositoryPg implements TeacherRepository {
 
     if (!res) return null;
 
-    return new Teacher(
-      res.id,
-      res.personId,
-      res.employeeNumber,
-      res.status,
-      res.hireDate,
-      res.terminationDate ?? undefined,
-      res.specialization ?? undefined,
-     /*  res.user ?? undefined,
-      res.subjects ?? undefined,
-      res.groups ?? undefined,
-      res.createdAt,
-      res.updatedAt */
-    );
+    return res as Teacher
   }
 
   // Crear docente
@@ -99,24 +86,11 @@ export class TeacherRepositoryPg implements TeacherRepository {
       },
     });
 
-    return new Teacher(
-      res.id,
-      res.personId,
-      res.employeeNumber,
-      res.status,
-      res.hireDate,
-      res.terminationDate ?? undefined,
-      res.specialization ?? undefined,
-      /* res.user ?? undefined,
-      res.subjects ?? undefined,
-      res.groups ?? undefined,
-      res.createdAt,
-      res.updatedAt */
-    );
+    return res as Teacher
   }
 
   // Actualizar docente
-  async update(id: number, data: TeacherUpdateData): Promise<Teacher | null> {
+  async update(id: string, data: any): Promise<Teacher | null> {
      
 
     const res = await prisma.teacher.update({
@@ -132,24 +106,11 @@ export class TeacherRepositoryPg implements TeacherRepository {
 
     if (!res) return null;
 
-    return new Teacher(
-      res.id,
-      res.personId,
-      res.employeeNumber,
-      res.status,
-      res.hireDate,
-      res.terminationDate ?? undefined,
-      res.specialization ?? undefined,
-      //res.user ?? undefined,
-      /* res.subjects ?? undefined,
-      res.groups ?? undefined,
-      res.createdAt,
-      res.updatedAt */
-    );
+    return res as Teacher
   }
 
   // Eliminar docente
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     await prisma.teacher.delete({ where: { id } });
     return true;
   }

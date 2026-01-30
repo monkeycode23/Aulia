@@ -6,7 +6,7 @@ import { prisma } from "../../database/ps/prisma";
 export class SchoolRepositoryPg implements SchoolRepository {
   
   
-  async findById(id: number): Promise<School | null> {
+  async findById(id: string): Promise<School | null> {
     const res = await prisma.school.findUnique({
       where: { id },
       include: {
@@ -81,7 +81,7 @@ export class SchoolRepositoryPg implements SchoolRepository {
   }
 
   // Actualizar escuela
-  async update(id: number, data: Partial<School>): Promise<School | null> {
+  async update(id: string, data: Partial<School>): Promise<School | null> {
     const res = await prisma.school.update({
       where: { id },
       data,
@@ -109,7 +109,7 @@ export class SchoolRepositoryPg implements SchoolRepository {
   }
 
   // Eliminar escuela
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     await prisma.school.delete({ where: { id } });
     return true;
   }

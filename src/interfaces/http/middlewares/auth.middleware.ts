@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import {AuthService} from "../services/auth.service";
+import {LocalAuthService} from "../../auth/auth.service";
 
 
 
@@ -18,13 +18,13 @@ export async function authRequired(req: Request, res: Response, next: NextFuncti
 
     //console.log(token,"tokeeeeeeeeeeeeeeeeeeeeeeen")
     
-
-    const decoded: any = await AuthService.verifyAccessToken(token);
+    const  service = new LocalAuthService();
+    const decoded: any = await service.verifyAccessToken(token);
 
     console.log(decoded,"decoded");
     
     // Guardamos el ID del usuario en la request
-    (req as any).userId = decoded.decoded.data.userId;
+    (req as any).userId = decoded.decoded.userId;
     
     
 
@@ -36,7 +36,7 @@ export async function authRequired(req: Request, res: Response, next: NextFuncti
 }
 
 
-export async function noAuthRoute(req: Request, res: Response, next: NextFunction) {
+export async function noAuthRequired(req: Request, res: Response, next: NextFunction) {
   try {
     const authHeader = req.headers.authorization;
     if (authHeader) return res.status(401).json({ errors:{

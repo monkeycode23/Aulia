@@ -33,6 +33,21 @@ async function main() {
       { name: "GROUP_EDIT" },
       { name: "GROUP_GET" },
 
+      { name: "GRADE_DELETE" },
+      { name: "GRADE_CREATE" },
+      { name: "GRADE_EDIT" },
+      { name: "GRADE_GET" },
+
+      { name: "PERSON_DELETE" },
+      { name: "PERSON_CREATE" },
+      { name: "PERSON_EDIT" },
+      { name: "PERSON_GET" },
+
+      { name: "SCHOOL_DELETE" },
+      { name: "SCHOOL_CREATE" },
+      { name: "SCHOOL_EDIT" },
+      { name: "SCHOOL_GET" },
+
       { name: "TEACHER_DELETE" },
       { name: "TEACHER_CREATE" },
       { name: "TEACHER_EDIT" },
@@ -64,7 +79,10 @@ async function main() {
       { name: "PARENT_EDIT" },
       { name: "PARENT_GET" },
 
-      
+      { name: "STAFF_DELETE" },
+      { name: "STAFF_CREATE" },
+      { name: "STAFF_EDIT" },
+      { name: "STAFF_GET" },
 
     ],
     skipDuplicates: true,

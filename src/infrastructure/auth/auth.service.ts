@@ -15,7 +15,7 @@ export class LocalAuthService {
     return bcrypt.hash(plainPassword, 10);
   }
 
-  generateAccessToken(userId: number): string {
+  generateAccessToken(userId: string): string {
     const jwt = new JwtService();
 
     return jwt.generate({ userId },"1h");
@@ -27,7 +27,7 @@ export class LocalAuthService {
     return jwt.verify(token);
   }
 
-  async generateRefreshToken(userId: number): Promise<any> {
+  async generateRefreshToken(userId: string): Promise<any> {
     const jwt = new JwtService();
 
     const token = jwt.generate({ userId }, "7d");
@@ -48,7 +48,7 @@ export class LocalAuthService {
     return token;
   }
 
-  async verifyRefreshToken(userId: number): Promise<any> {
+  async verifyRefreshToken(userId: string): Promise<any> {
     const jwt = new JwtService();
 
     const res = await prisma.token.findFirst({
@@ -62,4 +62,8 @@ export class LocalAuthService {
 
     return jwt.verify(res.token);
   }
+
+
+
+ 
 }

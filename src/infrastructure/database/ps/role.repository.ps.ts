@@ -7,7 +7,7 @@ import { Role } from "../../../types/actions";
 export class RoleRepositoryPg /* implements SchoolRepository  */{
   
   
-  async findById(id: number): Promise<Role | null> {
+  async findById(id: string): Promise<Role | null> {
     const res = await prisma.role.findUnique({
       where: { id },
       include: {
@@ -44,7 +44,7 @@ export class RoleRepositoryPg /* implements SchoolRepository  */{
   }
 
   // Actualizar escuela
-  async update(id: number, data: any): Promise<Role | null> {
+  async update(id: string, data: any): Promise<Role | null> {
     const res = await prisma.role.update({
       where: { id },
       data,
@@ -56,7 +56,7 @@ export class RoleRepositoryPg /* implements SchoolRepository  */{
   }
 
   // Eliminar escuela
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     await prisma.role.delete({ where: { id } });
     return true;
   }

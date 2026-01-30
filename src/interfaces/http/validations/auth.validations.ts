@@ -17,7 +17,9 @@ export const loginValidationRules = [
 
 export const registerValidationRules = [
     body("username").notEmpty().withMessage("El nombre es obligatorio"),
+    
     body("email").isEmail().withMessage("Email inválido"),
+    
     body("terms")
       .notEmpty()
       .withMessage("Terminos y condiciones  requerido")

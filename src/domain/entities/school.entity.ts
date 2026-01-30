@@ -1,7 +1,7 @@
 // domain/entities/school.entity.ts
 export class School {
   constructor(
-    public id: number,
+    public id: string,
     public name: string,
     public code?: string,
     public type?: string,
@@ -15,6 +15,6 @@ export class School {
     public postalCode?: string,
     public website?: string,
     public logoUrl?: string,
-    public principalId?: number,
+    public principalId?: string,
   ) {}
 }

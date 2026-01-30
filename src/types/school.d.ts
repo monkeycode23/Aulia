@@ -1,7 +1,7 @@
 export type SchoolType = 'PUBLIC' | 'PRIVATE' | 'CHARTER'; // ejemplo de tipos de escuela
 
 export interface School {
-  id: number;
+  id: string;
   name: string;
   code?: string;
   type: string; // o SchoolType si quieres usar enum

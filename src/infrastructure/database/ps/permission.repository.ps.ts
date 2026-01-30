@@ -8,7 +8,7 @@ import { EPermission } from "../../../../generated/prisma/enums";
 export class permissionRepositoryPg /* implements SchoolRepository  */{
   
   
-  async findById(id: number): Promise<Permission | null> {
+  async findById(id: string): Promise<Permission | null> {
     const res = await prisma.permission.findUnique({
       where: { id },
      
@@ -39,7 +39,7 @@ export class permissionRepositoryPg /* implements SchoolRepository  */{
   }
 
   // Actualizar escuela
-  async update(id: number, data: any): Promise<Permission | null> {
+  async update(id: string, data: any): Promise<Permission | null> {
     const res = await prisma.permission.update({
       where: { id },
       data,
@@ -51,7 +51,7 @@ export class permissionRepositoryPg /* implements SchoolRepository  */{
   }
 
   // Eliminar escuela
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     await prisma.permission.delete({ where: { id } });
     return true;
   }

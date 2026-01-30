@@ -1,7 +1,7 @@
 export type AuthProvider = "LOCAL" | "GOOGLE" | "GITHUB";
 
 export type User = {
-  id: number;
+  id: string;
   email: string;
   username?: string | null;
   passwordHash: string;

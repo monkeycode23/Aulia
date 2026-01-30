@@ -4,7 +4,7 @@ import { LocalAuthService } from "../../../infrastructure/auth/auth.service";
 import { JwtService } from "../../../infrastructure/auth/jwt.service";
 import { ValidationError } from "../../../shared/errors/app.errors";
 
-export class LoginLocalUseCase {
+export class CreateGradeUseCase {
   constructor(
     private repo: AuthRepository,
     private authService: LocalAuthService,

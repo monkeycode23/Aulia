@@ -4,51 +4,54 @@ import morgan from "morgan";
 import path from "path";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+dotenv.config();
 
 // app expresss
 const app = express();
-
-dotenv.config();
 
 
 // variables
 app.set("enviroment",process.env.ENVIROMENT)
 app.set("port",process.env.SERVER_PORT || 5000)
+app.set("statics",path.resolve(__dirname, './presentation/dist'))
 
-const staticPath = path.resolve(__dirname, './presentation/dist')
+
   
-
-  //middelwares
+  
+//middelwares
 app.use(cors());
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(staticPath));
+app.use(express.static(app.get("statics")));
   
 
 
 
-//routes
+//api routes
 import router from "./infrastructure/http/routes/index";
 app.use("/api", router);
-
+ 
 
 //graphql
 /* import { setupGraphQL } from "./graphql/graphql";
 setupGraphQL(app);
  */
 
-  // Para cualquier otra ruta, enviar el index.html de React
+  
+// Para cualquier otra ruta enviar el index.html de react
 app.get(/^(?!\/api\/).*/, (req, res) => {
-  res.sendFile(path.join(staticPath, 'index.html'));
+  res.sendFile(path.join(app.get("statics"), 'index.html'));
 });
 
-/* 
-import {errorHandler} from "./api/middlewares/errors.middleware";
-app.use(errorHandler)
- */
 
+
+//middleware exceptions
+import {exceptionHandler} from "./infrastructure/http/middlewares/exception.middleware";
+app.use(exceptionHandler)
+ 
+ 
 
 app.listen(app.get("port"), () => {
   console.log(`Servidor escuchando en ${

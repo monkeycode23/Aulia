@@ -12,10 +12,12 @@ export class RegisterLocalUseCase {
     private userRepo: UserRepository,
     private roleRepo: any,
     private schoolRepo: any,
+    private personRepo:any,
     private jwtService: JwtService,
   ) {}
 
   async execute(username: string, email: string, password: string) {
+    
     await this.validateUser(username, email);
 
     //generate password hash
@@ -39,6 +41,7 @@ export class RegisterLocalUseCase {
 
   async validateUser(email: string, username: string) {
     let user = await this.repo.findByEmail(email);
+    
     if (user)
       throw new ValidationError("User already exists", {
         email: "This user is already taken",
@@ -52,24 +55,22 @@ export class RegisterLocalUseCase {
   }
 
   async createUser(username: string, email: string, passwordHash: string) {
+    
     const princ_role = await this.roleRepo.findByName("PRINCIPAL");
     const user_role = await this.roleRepo.findByName("USER");
+    
+  
     const user = await this.userRepo.create({
       username,
       email,
       passwordHash,
       roles: {
         connect: [{ id: princ_role.id }, { id: user_role.id }],
-      },
+      }
     });
 
-    await this.schoolRepo.create({
-      name: `${username}'s School`,
-      principal: {
-        connect: { id: user.id },
-      },
-    });
 
+   
     return user;
   }
 }

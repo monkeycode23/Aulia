@@ -1,12 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 //import User from "../models/User.model";
-import {prisma} from '../../database/ps/prisma'
+import {prisma} from '@/infrastructure/database/ps/prisma'
 
 import { PERMISSIONS } from "../../../types/actions";
 import { ApiResponse } from "../response/api.response";
 
 // Permite solo usuarios con un rol específico
-export function requirePermissionRole(action: PERMISSIONS) {
+export function permissionsRequired(actions: PERMISSIONS[]) {
+
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const user =await prisma.user.findFirst({
@@ -24,7 +25,7 @@ export function requirePermissionRole(action: PERMISSIONS) {
       if (!user) throw new Error("User not found");
 
       const isPermit = user.roles.some((rol)=>{
-        return rol.permissions.some((p)=>p.name == action)
+        return rol.permissions.some((p:any)=>actions.includes(p.name) )
       })
 
       if (!isPermit) {

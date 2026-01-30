@@ -1,22 +1,25 @@
 import { Router } from "express";
 //import authController from "../controllers/auth/auth.contorller";
-import { authRequired,noAuthRoute } from "../middlewares/auth.middleware";
-import { 
-    loginValidationRules,
-    registerValidationRules,
-    forgotEmailValidationRules,
-    forgotCodeValidationRules,
-    forgotPasswordValidationRules } from "../validations/auth.validations";
-import { validateRequest } from "../middlewares/validator.middleware";
-import {AuthController} from "../controllers/auth.controller";
+import { authRequired,noAuthRequired } from "../middlewares/auth.middleware";
+import { permissionsRequired } from "../middlewares/role.middleware";
 
-const authContorller = new AuthController()
+import { PersonController } from "../controllers/person.controller";
+import { PERMISSIONS } from "@/types/actions";
+const personContorller = new PersonController()
 
 const router = Router();
 
 
-router.post("/register", noAuthRoute,registerValidationRules,validateRequest,authContorller.register);
-router.post("/login",noAuthRoute,loginValidationRules,validateRequest,authContorller.login);
+router.post("/",authRequired,permissionsRequired([PERMISSIONS.PERSON_CREATE]),personContorller.create);
+
+
+router.put("/:id",authRequired,permissionsRequired([PERMISSIONS.PERSON_EDIT]), personContorller.update);
+
+
+router.delete("/:id",authRequired,permissionsRequired([PERMISSIONS.PERSON_DELETE]),personContorller.delete)
+
+
+    
 //router.post("/verify",authRequired, authContorller.verifyAction());
 //router.post("/logout",authRequired, authRequired, authContorller.logoutAction()); 
 /* router.post("/resend-code",authRequired, authContorller.resendAction());
