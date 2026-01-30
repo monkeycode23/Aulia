@@ -1,8 +1,8 @@
 // infrastructure/http/controllers/AuthController.ts
 import { NextFunction, Request, Response } from "express";
 import { AuthRepositoryPg } from "../../database/ps/auth.repository.ps";
-import { LocalAuthService } from "../../auth/auth.service";
-import { JwtService } from "../../auth/jwt.service";
+import { LocalAuthService } from "../../services/auth.service";
+import { JwtService } from "../../services/jwt.service";
 import { LoginLocalUseCase } from "../../../application/usecases/auth/login.local.usecase";
 import { RegisterLocalUseCase } from "../../../application/usecases/auth/register.local.usecase";
 import { ApiResponse } from "../response/api.response";

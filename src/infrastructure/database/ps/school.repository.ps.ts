@@ -1,12 +1,12 @@
 // infrastructure/database/schoolRepositoryPg.ts
 import { SchoolRepository } from "../../../domain/repositories/school.repository";
-import { School } from "../../../domain/entities/school.entity";
+import { School, SchoolUpdate } from "../../../types/school";
 import { prisma } from "../../database/ps/prisma";
 
 export class SchoolRepositoryPg implements SchoolRepository {
   
   
-  async findById(id: number): Promise<School | null> {
+  async findById(id: string): Promise<School | null> {
     const res = await prisma.school.findUnique({
       where: { id },
       include: {
@@ -19,25 +19,8 @@ export class SchoolRepositoryPg implements SchoolRepository {
     });
     if (!res) return null;
 
-    return new School(
-      res.id,
-      res.name,
-      res.code ?? undefined,
-      res.type,
-      res.establishedAt ?? undefined,
-      res.email ?? undefined,
-      res.phone ?? undefined,
-      res.address ?? undefined,
-      res.city ?? undefined,
-      res.state ?? undefined,
-      res.country ?? undefined,
-      res.postalCode ?? undefined,
-      res.website ?? undefined,
-      res.logoUrl ?? undefined,
-      res.principalId ?? undefined
-    );
+    return res as School;
   }
-
   
   async findByCode(code: string): Promise<School | null> {
     const res = await prisma.school.findUnique({
@@ -52,23 +35,7 @@ export class SchoolRepositoryPg implements SchoolRepository {
     });
     if (!res) return null;
 
-    return new School(
-      res.id,
-      res.name,
-      res.code ?? undefined,
-      res.type,
-      res.establishedAt ?? undefined,
-      res.email ?? undefined,
-      res.phone ?? undefined,
-      res.address ?? undefined,
-      res.city ?? undefined,
-      res.state ?? undefined,
-      res.country ?? undefined,
-      res.postalCode ?? undefined,
-      res.website ?? undefined,
-      res.logoUrl ?? undefined,
-      res.principalId ?? undefined
-    );
+    return res as School;
   }
 
  
@@ -81,7 +48,7 @@ export class SchoolRepositoryPg implements SchoolRepository {
   }
 
   // Actualizar escuela
-  async update(id: number, data: Partial<School>): Promise<School | null> {
+  async update(id: string, data: SchoolUpdate): Promise<School | null> {
     const res = await prisma.school.update({
       where: { id },
       data,
@@ -89,28 +56,17 @@ export class SchoolRepositoryPg implements SchoolRepository {
 
     if (!res) return null;
 
-    return new School(
-      res.id,
-      res.name,
-      res.code ?? undefined,
-      res.type,
-      res.establishedAt ?? undefined,
-      res.email ?? undefined,
-      res.phone ?? undefined,
-      res.address ?? undefined,
-      res.city ?? undefined,
-      res.state ?? undefined,
-      res.country ?? undefined,
-      res.postalCode ?? undefined,
-      res.website ?? undefined,
-      res.logoUrl ?? undefined,
-      res.principalId ?? undefined
-    );
+    return res as School;
   }
 
-  // Eliminar escuela
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     await prisma.school.delete({ where: { id } });
     return true;
   }
+
+  async findAll(): Promise<School[]> {
+    const res = await prisma.school.findMany();
+    return res as School[];
+  }
+
 }

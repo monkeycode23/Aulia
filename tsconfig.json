@@ -13,5 +13,6 @@
     "inlineSources": true,
     "typeRoots": ["./src/types", "./node_modules/@types"]
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"], // Incluye todos los archivos en src
+  "exclude": ["prisma/models/**/*"] // Excluye los archivos en prisma/models
 }

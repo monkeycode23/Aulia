@@ -7,7 +7,7 @@ export type AuthProvider = "LOCAL" | "GOOGLE" | "GITHUB";
 import { User as TUser } from "../../types/user";
 
 export class User {
-  public id?: number;
+  public id?: string;
   public email?: string;
   public username?: string;
   public passwordHash?: string;
@@ -27,7 +27,6 @@ export class User {
 
   public roles: Role[] = [];
   public userSubscriptions: any //UserSubscription[] = [];
-  
   public person: Person;
 
 

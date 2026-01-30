@@ -1,5 +1,5 @@
 export type Person = {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   middleName?: string;
@@ -22,12 +22,12 @@ export type Person = {
   user?: User;
   student?: Student;
   teacher?: Teacher;
-  parent?: Parent;
+  tutor?: Tutor;
 };
 
 
 export type Student = {
-  id: number;
+  id: string;
   person: Person;
   enrollmentNumber: string;
   gradeLevel?: string;
@@ -49,7 +49,7 @@ export type Student = {
 
 
 export type Teacher = {
-  id: number;
+  id: string;
   person: Person;
   employeeNumber: string;
   specialization?: string;
@@ -70,7 +70,7 @@ export type Teacher = {
 
 
 export type Group = {
-  id: number;
+  id: string;
   name: string; // ej: "3A"
   gradeLevel: string; // ej: "Primaria 3"
   status: "ACTIVE" | "INACTIVE" | "CLOSED";
@@ -88,7 +88,7 @@ export type Group = {
 
 
 export type Subject = {
-  id: number;
+  id: string;
   name: string; // ej: "Matemáticas"
   code?: string; // ej: "MAT101"
   description?: string;

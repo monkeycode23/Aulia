@@ -1,8 +1,8 @@
 // application/useCases/auth/loginLocal.useCase.ts
 import { AuthRepository } from "../../../domain/repositories/auth.repository";
 import { UserRepository } from "../../../domain/repositories/user.repository";
-import { LocalAuthService } from "../../../infrastructure/auth/auth.service";
-import { JwtService } from "../../../infrastructure/auth/jwt.service";
+import { LocalAuthService } from "../../../infrastructure/services/auth.service";
+import { JwtService } from "../../../infrastructure/services/jwt.service";
 import { ValidationError } from "../../../shared/errors/app.errors";
 
 export class RegisterLocalUseCase {

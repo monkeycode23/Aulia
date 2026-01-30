@@ -1,7 +1,7 @@
 import { PrismaClient } from '../generated/prisma/client';
 
-import {prisma} from "../src/infrastructure/database/ps/prisma"
- 
+import { prisma } from "../src/infrastructure/database/ps/prisma"
+
 
 async function main() {
   // Crear roles
@@ -11,11 +11,11 @@ async function main() {
       { name: "ADMIN" },
       { name: "MOD" },
       { name: "PRINCIPAL" },
-       { name: "SECRETARY" },
-       { name: "CONSUL" },
-       { name: "DIRECTIVE_ADMIN" },
-       { name: "SCHOOL_ADMIN" },
-       { name: "PARENT" },
+      { name: "SECRETARY" },
+      { name: "CONSUL" },
+      { name: "DIRECTIVE_ADMIN" },
+      { name: "SCHOOL_ADMIN" },
+      { name: "TUTOR" },
     ],
     skipDuplicates: true,
   });
@@ -59,12 +59,12 @@ async function main() {
       { name: "EVENT_GET" },
 
 
-      { name: "PARENT_DELETE" },
-      { name: "PARENT_CREATE" },
-      { name: "PARENT_EDIT" },
-      { name: "PARENT_GET" },
+      { name: "TUTOR_DELETE" },
+      { name: "TUTOR_CREATE" },
+      { name: "TUTOR_EDIT" },
+      { name: "TUTOR_GET" },
 
-      
+
 
     ],
     skipDuplicates: true,
@@ -75,7 +75,7 @@ async function main() {
 
 main()
   .catch((e) => console.error(e))
-  .finally(async () => await prisma.$disconnect()); 
+  .finally(async () => await prisma.$disconnect());
 
 
-  
+

@@ -34,10 +34,10 @@ export enum PERMISSIONS {
   EVENT_GET = "EVENT_GET",
   EVENT_DELETE = "EVENT_DELETE",
 
-  PARENT_CREATE = "PARENT_CREATE",
-  PARENT_EDIT = "PARENT_EDIT",
-  PARENT_GET = "PARENT_GET",
-  PARENT_DELETE = "PARENT_DELETE",
+  TUTOR_CREATE = "TUTOR_CREATE",
+  TUTOR_EDIT = "TUTOR_EDIT",
+  TUTOR_GET = "TUTOR_GET",
+  TUTOR_DELETE = "TUTOR_DELETE",
 }
 
 
@@ -46,19 +46,19 @@ export enum ROLES {
   MOD = "MOD",
   ADMIN = "ADMIN",
   DIRECTIVE_ADMIN = "DIRECTIVE_ADMIN",
-  PARENT = "PARENT",
+  TUTOR = "TUTOR",
 }
 
 
 
 
 export type Permission = {
-  id: number;
+  id: string;
   name: PERMISSIONS;
 };
 
 export type Role = {
-  id: number;
+  id: string;
   name: ROLES;
   permissions: Permission[];
 };

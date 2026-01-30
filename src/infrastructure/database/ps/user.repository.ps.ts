@@ -6,12 +6,11 @@ import { prisma } from "../../database/ps/prisma";
 export class UserRepositoryPg implements UserRepository {
 
   // Buscar usuario por ID
-  async findById(id: number): Promise<User | null> {
+  async findById(id: string): Promise<User | null> {
     const res = await prisma.user.findUnique({
       where: { id },
       include: {
         roles: true,
-        userSubscriptions: true,
         person: true,
       },
     });
@@ -28,7 +27,6 @@ export class UserRepositoryPg implements UserRepository {
       where: { email },
       include: {
         roles: true,
-        userSubscriptions: true,
         person: true,
       },
     });
@@ -44,7 +42,6 @@ export class UserRepositoryPg implements UserRepository {
       data,
       include: {
         roles: true,
-        userSubscriptions: true,
         person: true,
       },
     });
@@ -53,7 +50,7 @@ export class UserRepositoryPg implements UserRepository {
   }
 
   // Actualizar usuario
-  async update(id: number, data: Partial<User>): Promise<User | null> {
+  async update(id: string, data: Partial<User>): Promise<User | null> {
     // Omitir campos que Prisma no permite actualizar directamente (relaciones)
     const { roles, userSubscriptions, person, id: _, ...updateData } = data;
 
@@ -62,7 +59,6 @@ export class UserRepositoryPg implements UserRepository {
       data: updateData,
       include: {
         roles: true,
-        userSubscriptions: true,
         person: true,
       },
     });
@@ -73,8 +69,13 @@ export class UserRepositoryPg implements UserRepository {
   }
 
   // Eliminar usuario
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     await prisma.user.delete({ where: { id } });
     return true;
+  }
+
+  async findAll(): Promise<User[]> {
+    const res = await prisma.user.findMany();
+    return res.map((user) => new User({...user}));
   }
 }

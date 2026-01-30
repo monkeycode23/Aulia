@@ -1,7 +1,7 @@
 // application/useCases/auth/loginLocal.useCase.ts
 import { AuthRepository } from "../../../domain/repositories/auth.repository";
-import { LocalAuthService } from "../../../infrastructure/auth/auth.service";
-import { JwtService } from "../../../infrastructure/auth/jwt.service";
+import { LocalAuthService } from "../../../infrastructure/services/auth.service";
+import { JwtService } from "../../../infrastructure/services/jwt.service";
 
 export class LoginLocalUseCase {
   constructor(

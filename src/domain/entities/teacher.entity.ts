@@ -6,8 +6,8 @@ import { Subject } from "../../types/general";
 import { Group } from "../../types/general";
 
 export interface Teacher {
-  id: number;
-  personId: number;
+  id: string;
+  personId: string;
   person?: Person;
 
   employeeNumber: string;
@@ -28,8 +28,8 @@ export interface Teacher {
 
 export class Teacher {
   constructor(
-    public id: number,
-    public personId: number,
+    public id: string,
+    public personId: string,
     public employeeNumber: string,
     public status: string,
     public hireDate: Date,

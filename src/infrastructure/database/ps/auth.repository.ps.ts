@@ -31,7 +31,7 @@ export class AuthRepositoryPg implements AuthRepository {
   }
 
 
-  async findToken(userId: number, tokenStr: string): Promise<any | null> {
+  async findToken(userId: string, tokenStr: string): Promise<any | null> {
     const res = await prisma.user.findUnique({
         where:{
             id:userId
