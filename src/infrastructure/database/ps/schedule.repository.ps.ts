@@ -4,8 +4,14 @@ import { prisma } from "../../database/ps/prisma";
 
 export class ScheduleRepositoryPs implements ScheduleRepository {
     async create(schedule: any): Promise<Schedule> {
+        const { academicPeriodId, teacherId, groupId, subjectId, ...data } = schedule;
         const res = await prisma.schedule.create({
-            data: schedule,
+            data: {
+                ...data,
+                academicPeriod: { connect: { id: academicPeriodId } },
+                teacher: { connect: { id: teacherId } },
+                groupSubject: { connect: { groupId_subjectId: { groupId, subjectId } } }
+            },
             include: {
                 academicPeriod: true,
                 groupSubject: true,
@@ -71,9 +77,15 @@ export class ScheduleRepositoryPs implements ScheduleRepository {
     }
 
     async update(id: string, schedule: any): Promise<Schedule | null> {
+        const { academicPeriodId, teacherId, groupId, subjectId, ...data } = schedule;
         const res = await prisma.schedule.update({
             where: { id },
-            data: schedule,
+            data: {
+                ...data,
+                ...(academicPeriodId && { academicPeriod: { connect: { id: academicPeriodId } } }),
+                ...(teacherId && { teacher: { connect: { id: teacherId } } }),
+                ...(groupId && subjectId && { groupSubject: { connect: { groupId_subjectId: { groupId, subjectId } } } })
+            },
             include: {
                 academicPeriod: true,
                 groupSubject: true,

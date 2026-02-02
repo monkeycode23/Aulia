@@ -4,8 +4,15 @@ import { prisma } from "../../database/ps/prisma";
 
 export class GroupRepositoryPs implements GroupRepository {
     async create(group: any): Promise<Group> {
+        const { schoolId, teacherIds, studentIds, subjectIds, ...data } = group;
         const res = await prisma.group.create({
-            data: group,
+            data: {
+                ...data,
+                ...(schoolId && { school: { connect: { id: schoolId } } }),
+                ...(teacherIds && { teachers: { connect: teacherIds.map((id: string) => ({ id })) } }),
+                ...(studentIds && { students: { connect: studentIds.map((id: string) => ({ id })) } }),
+                ...(subjectIds && { subjects: { connect: subjectIds.map((id: string) => ({ id })) } })
+            },
             include: {
                 school: true,
                 teachers: true,
@@ -83,9 +90,16 @@ export class GroupRepositoryPs implements GroupRepository {
     }
 
     async update(id: string, group: any): Promise<Group | null> {
+        const { schoolId, teacherIds, studentIds, subjectIds, ...data } = group;
         const res = await prisma.group.update({
             where: { id },
-            data: group,
+            data: {
+                ...data,
+                ...(schoolId && { school: { connect: { id: schoolId } } }),
+                ...(teacherIds && { teachers: { set: teacherIds.map((id: string) => ({ id })) } }),
+                ...(studentIds && { students: { set: studentIds.map((id: string) => ({ id })) } }),
+                ...(subjectIds && { subjects: { set: subjectIds.map((id: string) => ({ id })) } })
+            },
             include: {
                 school: true,
                 teachers: true,

@@ -4,8 +4,13 @@ import { prisma } from "../../database/ps/prisma";
 
 export class TutorRepositoryPs implements TutorRepository {
     async create(tutor: any): Promise<Tutor> {
+        const { personId, studentIds, ...data } = tutor;
         const res = await prisma.tutor.create({
-            data: tutor,
+            data: {
+                ...data,
+                person: { connect: { id: personId } },
+                ...(studentIds && { students: { connect: studentIds.map((id: string) => ({ id })) } })
+            },
             include: {
                 person: true,
                 students: true
@@ -53,9 +58,14 @@ export class TutorRepositoryPs implements TutorRepository {
     }
 
     async update(id: string, tutor: any): Promise<Tutor | null> {
+        const { personId, studentIds, ...data } = tutor;
         const res = await prisma.tutor.update({
             where: { id },
-            data: tutor,
+            data: {
+                ...data,
+                ...(personId && { person: { connect: { id: personId } } }),
+                ...(studentIds && { students: { set: studentIds.map((id: string) => ({ id })) } })
+            },
             include: {
                 person: true,
                 students: true

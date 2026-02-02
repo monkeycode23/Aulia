@@ -4,8 +4,12 @@ import { prisma } from "../../database/ps/prisma";
 
 export class ClassRoomRepositoryPs implements ClassRoomRepository {
     async create(classRoom: any): Promise<ClassRoom> {
+        const { schoolId, ...data } = classRoom;
         const res = await prisma.classRoom.create({
-            data: classRoom,
+            data: {
+                ...data,
+                school: { connect: { id: schoolId } }
+            },
             include: {
                 school: true
             }
@@ -68,9 +72,13 @@ export class ClassRoomRepositoryPs implements ClassRoomRepository {
     }
 
     async update(id: string, classRoom: any): Promise<ClassRoom | null> {
+        const { schoolId, ...data } = classRoom;
         const res = await prisma.classRoom.update({
             where: { id },
-            data: classRoom,
+            data: {
+                ...data,
+                ...(schoolId && { school: { connect: { id: schoolId } } })
+            },
             include: {
                 school: true
             }

@@ -4,8 +4,12 @@ import { prisma } from "../../database/ps/prisma";
 
 export class AcademicPeriodRepositoryPs implements AcademicPeriodRepository {
     async create(academicPeriod: any): Promise<AcademicPeriod> {
+        const { schoolId, ...data } = academicPeriod;
         const res = await prisma.academicPeriod.create({
-            data: academicPeriod,
+            data: {
+                ...data,
+                school: { connect: { id: schoolId } }
+            },
             include: {
                 school: true,
                 schedules: true
@@ -71,9 +75,13 @@ export class AcademicPeriodRepositoryPs implements AcademicPeriodRepository {
     }
 
     async update(id: string, academicPeriod: any): Promise<AcademicPeriod | null> {
+        const { schoolId, ...data } = academicPeriod;
         const res = await prisma.academicPeriod.update({
             where: { id },
-            data: academicPeriod,
+            data: {
+                ...data,
+                ...(schoolId && { school: { connect: { id: schoolId } } })
+            },
             include: {
                 school: true,
                 schedules: true

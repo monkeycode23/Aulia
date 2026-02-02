@@ -4,8 +4,14 @@ import { prisma } from "../../database/ps/prisma";
 
 export class SubjectRepositoryPs implements SubjectRepository {
     async create(subject: any): Promise<Subject> {
+        const { schoolId, teacherIds, groupIds, ...data } = subject;
         const res = await prisma.subject.create({
-            data: subject,
+            data: {
+                ...data,
+                ...(schoolId && { school: { connect: { id: schoolId } } }),
+                ...(teacherIds && { teachers: { connect: teacherIds.map((id: string) => ({ id })) } }),
+                ...(groupIds && { groups: { connect: groupIds.map((id: string) => ({ id })) } })
+            },
             include: {
                 school: true,
                 teachers: true,
@@ -80,9 +86,15 @@ export class SubjectRepositoryPs implements SubjectRepository {
     }
 
     async update(id: string, subject: any): Promise<Subject | null> {
+        const { schoolId, teacherIds, groupIds, ...data } = subject;
         const res = await prisma.subject.update({
             where: { id },
-            data: subject,
+            data: {
+                ...data,
+                ...(schoolId && { school: { connect: { id: schoolId } } }),
+                ...(teacherIds && { teachers: { set: teacherIds.map((id: string) => ({ id })) } }),
+                ...(groupIds && { groups: { set: groupIds.map((id: string) => ({ id })) } })
+            },
             include: {
                 school: true,
                 teachers: true,
