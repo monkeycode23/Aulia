@@ -3,7 +3,9 @@ import { body } from "express-validator";
 export const createAcademicPeriodValidation = [
     body("name")
         .notEmpty()
-        .withMessage("El nombre es obligatorio"),
+        .withMessage("El nombre es obligatorio")
+        .isLength({ min: 3, max: 100 })
+        .withMessage("El nombre debe tener entre 3 y 100 caracteres"),
     body("startDate")
         .notEmpty()
         .withMessage("La fecha de inicio es obligatoria")
@@ -25,7 +27,9 @@ export const updateAcademicPeriodValidation = [
     body("name")
         .optional()
         .notEmpty()
-        .withMessage("El nombre no puede estar vacío"),
+        .withMessage("El nombre no puede estar vacío")
+        .isLength({ min: 3, max: 100 })
+        .withMessage("El nombre debe tener entre 3 y 100 caracteres"),
     body("startDate")
         .optional()
         .isISO8601()

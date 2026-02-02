@@ -3,7 +3,13 @@ import { body } from "express-validator";
 export const createClassRoomValidation = [
     body("name")
         .notEmpty()
-        .withMessage("El nombre es obligatorio"),
+        .withMessage("El nombre es obligatorio")
+        .isLength({ min: 2, max: 50 })
+        .withMessage("El nombre debe tener entre 2 y 50 caracteres"),
+    body("description")
+        .optional()
+        .isLength({ max: 500 })
+        .withMessage("La descripción no puede exceder los 500 caracteres"),
     body("capacity")
         .notEmpty()
         .withMessage("La capacidad es obligatoria")
@@ -20,7 +26,13 @@ export const updateClassRoomValidation = [
     body("name")
         .optional()
         .notEmpty()
-        .withMessage("El nombre no puede estar vacío"),
+        .withMessage("El nombre no puede estar vacío")
+        .isLength({ min: 2, max: 50 })
+        .withMessage("El nombre debe tener entre 2 y 50 caracteres"),
+    body("description")
+        .optional()
+        .isLength({ max: 500 })
+        .withMessage("La descripción no puede exceder los 500 caracteres"),
     body("capacity")
         .optional()
         .isInt({ min: 1 })
