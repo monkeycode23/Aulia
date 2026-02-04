@@ -62,6 +62,29 @@ export class ClassRoomRepositoryPs implements ClassRoomRepository {
         ));
     }
 
+    async findByName(name: string): Promise<ClassRoom | null> {
+        const res = await prisma.classRoom.findUnique({
+            where: { name },
+            include: {
+                school: true
+            }
+        });
+
+        if (!res) return null;
+
+        return new ClassRoom(
+            res.id,
+            res.name,
+            res.status,
+            res.capacity,
+            res.resources,
+            res.description,
+            res.createdAt,
+            res.updatedAt ?? new Date(),
+            res.school as any
+        );
+    }
+
     async findById(id: string): Promise<ClassRoom | null> {
         const res = await prisma.classRoom.findUnique({
             where: { id },

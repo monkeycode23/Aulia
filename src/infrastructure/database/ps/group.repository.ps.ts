@@ -75,6 +75,34 @@ export class GroupRepositoryPs implements GroupRepository {
         ));
     }
 
+    async findByName(name: string): Promise<Group | null> {
+        const res = await prisma.group.findFirst({
+            where: { name },
+            include: {
+                school: true,
+                teachers: true,
+                students: true,
+                subjects: true,
+                groupSubjects: true
+            }
+        });
+
+        if (!res) return null;
+
+        return new Group(
+            res.id,
+            res.name,
+            res.gradeLevel,
+            res.status,
+            res.teachers as any,
+            res.subjects as any,
+            res.school as any,
+            res.createdAt,
+            res.updatedAt,
+            res.groupSubjects as any
+        );
+    }
+
     async findById(id: string): Promise<Group | null> {
         const res = await prisma.group.findUnique({
             where: { id },

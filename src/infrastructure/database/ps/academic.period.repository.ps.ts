@@ -64,6 +64,30 @@ export class AcademicPeriodRepositoryPs implements AcademicPeriodRepository {
         ));
     }
 
+    async findByName(name: string): Promise<AcademicPeriod | null> {
+        const res = await prisma.academicPeriod.findUnique({
+            where: { name },
+            include: {
+                school: true,
+                schedules: true
+            }
+        });
+
+        if (!res) return null;
+
+        return new AcademicPeriod(
+            res.id,
+            res.name,
+            res.status,
+            res.startDate,
+            res.endDate,
+            res.createdAt,
+            res.updatedAt ?? new Date(),
+            [res.school] as any,
+            res.schedules as any
+        );
+    }
+
     async findById(id: string): Promise<AcademicPeriod | null> {
         const res = await prisma.academicPeriod.findUnique({
             where: { id },

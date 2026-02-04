@@ -72,6 +72,33 @@ export class SubjectRepositoryPs implements SubjectRepository {
         ));
     }
 
+    async findByCode(code: string): Promise<Subject | null> {
+        const res = await prisma.subject.findUnique({
+            where: { code },
+            include: {
+                school: true,
+                teachers: true,
+                groups: true,
+                groupSubjects: true
+            }
+        });
+
+        if (!res) return null;
+
+        return new Subject(
+            res.id,
+            res.name,
+            res.code ?? "",
+            res.status,
+            res.createdAt,
+            res.updatedAt,
+            res.school as any,
+            res.teachers as any,
+            res.groups as any,
+            res.groupSubjects as any
+        );
+    }
+
     async findById(id: string): Promise<Subject | null> {
         const res = await prisma.subject.findUnique({
             where: { id },

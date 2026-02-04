@@ -53,6 +53,24 @@ export class TutorRepositoryPs implements TutorRepository {
         ));
     }
 
+    async findByPersonId(personId: string): Promise<Tutor | null> {
+        const res = await prisma.tutor.findUnique({
+            where: { personId },
+            include: {
+                person: true,
+                students: true
+            }
+        });
+
+        if (!res) return null;
+
+        return new Tutor(
+            res.id,
+            res.person as any,
+            res.students as any
+        );
+    }
+
     async findById(id: string): Promise<Tutor | null> {
         const res = await prisma.tutor.findUnique({
             where: { id },

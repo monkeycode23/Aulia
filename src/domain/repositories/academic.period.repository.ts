@@ -4,6 +4,7 @@ export interface AcademicPeriodRepository {
     create(academicPeriod: any): Promise<AcademicPeriod>;
     findAll(): Promise<AcademicPeriod[]>;
     findById(id: string): Promise<AcademicPeriod | null>;
+    findByName(name: string): Promise<AcademicPeriod | null>;
     update(id: string, academicPeriod: any): Promise<AcademicPeriod | null>;
     delete(id: string): Promise<void>;
 }
